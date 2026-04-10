@@ -79,3 +79,7 @@ export PATH
 
 # Google Cloud SDK
 export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/blut/.lmstudio/bin"
+# End of LM Studio CLI section
