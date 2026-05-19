@@ -56,5 +56,8 @@ for link in ~/.zshrc ~/.config/zsh ~/.yabairc; do
 done && \
 [[ -L "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ]] && \
   echo "✓ Ghostty config -> $(readlink "$HOME/Library/Application Support/com.mitchellh.ghostty/config")" || \
-  echo "✗ Ghostty config (not a symlink)"
+  echo "✗ Ghostty config (not a symlink)" && \
+[[ -L "$HOME/Library/Application Support/Cursor/User/settings.json" ]] && \
+  echo "✓ Cursor settings -> $(readlink "$HOME/Library/Application Support/Cursor/User/settings.json")" || \
+  echo "✗ Cursor settings (not a symlink — edits in blut-setup won't apply)"
 ```

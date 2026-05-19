@@ -42,11 +42,13 @@
   "editor.acceptSuggestionOnEnter": "smart", // No more accidental accepts
   "editor.wordWrap": "on", // Never scroll horizontally
 
-  // Minimap (Stealth)
+  // Minimap & scrollbars
   "editor.minimap.enabled": true,
-  "editor.minimap.autohide": "mouseover",
+  "editor.minimap.autohide": false,
   "editor.minimap.showSlider": "mouseover",
   "editor.minimap.renderCharacters": false,
+  "editor.scrollbar.vertical": "auto",
+  "editor.scrollbar.horizontal": "auto",
   //#endregion
 
   //#region [Files & Git]
@@ -94,6 +96,8 @@
       "sideBarSectionHeader.background": "#08080a",
       "sideBar.foreground": "#a6adc8",
       "editorGroupHeader.tabsBackground": "#08080a",
+      "editorGroupHeader.tabsBorder": "#313244",
+      "editorGroupHeader.border": "#313244",
 
       // Input Fields (Agent Chat Glow)
       "focusBorder": "#cba6f7",
@@ -102,7 +106,7 @@
 
       // Webviews & Panels (Agent Manager / Chat)
       "panel.background": "#0d0d10",
-      "panel.border": "#00000000",
+      "panel.border": "#45475a",
       "panelTitle.activeBorder": "#cba6f7",
       "panelTitle.activeForeground": "#cba6f7",
       "panelTitle.inactiveForeground": "#585b70",
@@ -112,7 +116,7 @@
       "titleBar.inactiveBackground": "#08080a",
       "titleBar.activeForeground": "#585b7080",
       "titleBar.inactiveForeground": "#585b7040",
-      "titleBar.border": "#00000000",
+      "titleBar.border": "#313244",
 
       // Command Center (Agent Manager controls)
       "commandCenter.border": "#00000000",
@@ -152,10 +156,12 @@
       "editorInlayHint.background": "#00000000",
       "editorInlayHint.foreground": "#585b7060",
 
-      // Clean up the borders
-      "sideBar.border": "#00000000",
-      "editorGroup.border": "#00000000",
-      "statusBar.border": "#00000000",
+      // Panel & layout borders
+      "sideBar.border": "#313244",
+      "editorGroup.border": "#313244",
+      "statusBar.border": "#1e1e2e",
+      "activityBar.border": "#1e1e2e",
+      "sash.hoverBorder": "#cba6f7",
 
       // Selections
       "editor.selectionBackground": "#b4befe25",
@@ -225,16 +231,18 @@
 
       "activityBar.foreground": "#cba6f780",
       "activityBar.inactiveForeground": "#585b70",
-      "activityBar.border": "#00000000",
 
-      // Stealth Scrollbars
-      "scrollbar.shadow": "#00000000",
-      "scrollbarSlider.background": "#585b7020",
-      "scrollbarSlider.hoverBackground": "#585b7040",
-      "scrollbarSlider.activeBackground": "#cba6f740",
-      "editorOverviewRuler.border": "#00000000",
-      "editorOverviewRuler.background": "#0d0d10", // Seamless track
+      // Scrollbars & minimap (readable, translucent — slider on hover only)
+      "scrollbar.shadow": "#00000050",
+      "scrollbarSlider.background": "#585b7060",
+      "scrollbarSlider.hoverBackground": "#585b7099",
+      "scrollbarSlider.activeBackground": "#cba6f7bb",
+      "editorOverviewRuler.border": "#313244",
+      "editorOverviewRuler.background": "#0d0d10",
       "minimap.background": "#0d0d10",
+      "minimapSlider.background": "#585b7040",
+      "minimapSlider.hoverBackground": "#585b7080",
+      "minimapSlider.activeBackground": "#cba6f766",
 
       // Quick Input (Command Palette)
       "quickInput.background": "#0d0d10",
