@@ -291,7 +291,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "claudeCode.preferredLocation": "sidebar",
-  "claudeCode.selectedModel": "opus"
+  "claudeCode.selectedModel": "opus",
+  "window.autoDetectColorScheme": false,
+  "workbench.agentsWindowButton.enabled": false
   //#endregion
 
   //#region [Misc & New Settings - Append Below]

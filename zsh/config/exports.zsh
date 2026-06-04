@@ -8,6 +8,9 @@ export LANG=en_US.UTF-8
 # Start with system paths if needed, or just let them be
 # But usually $PATH already has system stuff. We prepend custom stuff.
 
+# Mise
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
 # Local Binaries
 export PATH="$HOME/.local/bin:$PATH"
 
