@@ -8,7 +8,7 @@ background to match the Ghostty setup, UI surfaces darkened a step.
 
 1. Open Superset → **Settings → Appearance → Custom Themes**.
 2. Click **Import custom theme files** and select
-   `catppuccin-mocha.superset-theme.json`.
+   `catppuccin-mocha.json`.
 3. Pick **Catppuccin Mocha** from the theme list.
 
 ## Update after editing the JSON
