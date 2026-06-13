@@ -12,6 +12,8 @@ blut-setup/
 │   ├── .zshrc        # Main shell config (interactive)
 │   ├── .zshenv       # Sourced by every zsh; mise shims fallback for non-interactive shells
 │   └── config/       # Modular zsh config (aliases, exports, plugins, fzf-tab)
+├── mise/
+│   └── config.toml   # mise tool versions + global npm: CLIs (codex, omc, …)
 ├── yabai/
 │   └── .yabairc      # Yabai window manager
 └── vscode/           # VS Code settings
@@ -65,6 +67,10 @@ ln -sf "$(pwd)/zsh/.zshenv" ~/.zshenv
 mkdir -p ~/.config
 ln -sf "$(pwd)/zsh/config" ~/.config/zsh
 
+mkdir -p ~/.config/mise
+ln -sf "$(pwd)/mise/config.toml" ~/.config/mise/config.toml
+mise trust "$(pwd)/mise/config.toml"   # mise resolves the symlink to its real path; trust it once
+
 ln -sf "$(pwd)/yabai/.yabairc" ~/.yabairc
 
 mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
@@ -81,7 +87,7 @@ exec zsh -l
 
 ```bash
 echo "=== Symlinks ===" && \
-for link in ~/.zshrc ~/.zshenv ~/.config/zsh ~/.yabairc; do
+for link in ~/.zshrc ~/.zshenv ~/.config/zsh ~/.config/mise/config.toml ~/.yabairc; do
   [[ -L "$link" ]] && echo "✓ $link -> $(readlink "$link")" || echo "✗ $link (not a symlink)"
 done && \
 [[ -L "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ]] && \
