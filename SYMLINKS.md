@@ -7,6 +7,7 @@ This repo uses symlinks so config changes apply immediately on your system. Appl
 | Link | Target |
 |------|--------|
 | `~/.zshrc` | `blut-setup/zsh/.zshrc` |
+| `~/.zshenv` | `blut-setup/zsh/.zshenv` |
 | `~/.config/zsh` | `blut-setup/zsh/config` |
 | `~/.yabairc` | `blut-setup/yabai/.yabairc` |
 | `~/Library/Application Support/com.mitchellh.ghostty/config` | `blut-setup/ghostty/config` |
@@ -18,6 +19,7 @@ This repo uses symlinks so config changes apply immediately on your system. Appl
 cd /path/to/blut-setup
 
 ln -sf "$(pwd)/zsh/.zshrc" ~/.zshrc
+ln -sf "$(pwd)/zsh/.zshenv" ~/.zshenv
 mkdir -p ~/.config
 ln -sf "$(pwd)/zsh/config" ~/.config/zsh
 ln -sf "$(pwd)/yabai/.yabairc" ~/.yabairc
@@ -51,7 +53,7 @@ git submodule update --init --recursive
 
 ```bash
 echo "=== Symlinks ===" && \
-for link in ~/.zshrc ~/.config/zsh ~/.yabairc; do
+for link in ~/.zshrc ~/.zshenv ~/.config/zsh ~/.yabairc; do
   [[ -L "$link" ]] && echo "✓ $link -> $(readlink "$link")" || echo "✗ $link (not a symlink)"
 done && \
 [[ -L "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ]] && \

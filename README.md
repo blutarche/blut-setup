@@ -9,7 +9,8 @@ blut-setup/
 ├── ghostty/          # Ghostty terminal config
 │   └── config
 ├── zsh/
-│   ├── .zshrc        # Main shell config
+│   ├── .zshrc        # Main shell config (interactive)
+│   ├── .zshenv       # Sourced by every zsh; mise shims fallback for non-interactive shells
 │   └── config/       # Modular zsh config (aliases, exports, plugins, fzf-tab)
 ├── yabai/
 │   └── .yabairc      # Yabai window manager
@@ -60,6 +61,7 @@ brew install antidote starship zoxide fzf atuin mise navi thefuck fd fastfetch e
 cd /path/to/blut-setup
 
 ln -sf "$(pwd)/zsh/.zshrc" ~/.zshrc
+ln -sf "$(pwd)/zsh/.zshenv" ~/.zshenv
 mkdir -p ~/.config
 ln -sf "$(pwd)/zsh/config" ~/.config/zsh
 
@@ -79,7 +81,7 @@ exec zsh -l
 
 ```bash
 echo "=== Symlinks ===" && \
-for link in ~/.zshrc ~/.config/zsh ~/.yabairc; do
+for link in ~/.zshrc ~/.zshenv ~/.config/zsh ~/.yabairc; do
   [[ -L "$link" ]] && echo "✓ $link -> $(readlink "$link")" || echo "✗ $link (not a symlink)"
 done && \
 [[ -L "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ]] && \
