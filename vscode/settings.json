@@ -260,13 +260,21 @@
     "[Catppuccin Mocha]": {
       "textMateRules": [
         {
-          "scope": ["italic", "comment", "storage.type.class.js"],
+          "scope": [
+            "italic",
+            "comment",
+            "storage.type.class.js"
+          ],
           "settings": {
             "fontStyle": "italic"
           }
         },
         {
-          "scope": ["keyword.control", "storage.type", "storage.modifier"],
+          "scope": [
+            "keyword.control",
+            "storage.type",
+            "storage.modifier"
+          ],
           "settings": {
             "fontStyle": "bold"
           }
