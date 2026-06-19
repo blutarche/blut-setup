@@ -1,0 +1,101 @@
+#!/usr/bin/env zsh
+#
+# cpuleaks — find (and optionally kill) leaked CPU-hogging processes you own.
+#
+# Run it WHEN YOUR MACHINE IS HOT (fans spinning). It looks for processes that
+# are burning CPU *right now* AND are orphaned + detached — the signature of a
+# leaked dev-server / CLI whose parent died but the child kept busy-looping
+# (e.g. an orphaned `tsx --watch` worker reparented to launchd).
+#
+# A process is flagged only when ALL of these hold:
+#   - burning >= threshold% CPU right now   (instantaneous, measured via `top`)
+#   - ppid == 1                             (orphaned — a server you're still
+#                                            running has a LIVE parent, so it's spared)
+#   - no controlling TTY                    (your active session has a TTY → never flagged)
+#   - owned by you                          (never touches root/system processes)
+#
+# Why `top`, not `ps`: macOS `ps %CPU` is a lifetime average — a process pegged
+# hours ago still shows high, and a currently-pegged one can show low. `top -l 2`
+# gives the true instantaneous value. Caveat: these leaks are BURSTY — if you run
+# this during an idle trough, it correctly finds nothing. Run it while it's hot.
+#
+# DRY RUN by default. `cpuleaks --kill` terminates the matches (SIGTERM, then
+# SIGKILL survivors) after a confirmation prompt. Nothing is ever auto-killed.
+#
+# Usage:
+#   cpuleaks                 # list current orphaned CPU hogs (dry run)
+#   cpuleaks --kill          # list, then ask to kill
+#   cpuleaks --threshold 50  # only flag processes >= 50% CPU (default 20)
+
+emulate -L zsh
+
+local KILL=0 THRESH=20
+while (( $# )); do
+  case "$1" in
+    -k|--kill)      KILL=1 ;;
+    -t|--threshold) shift; THRESH="$1" ;;
+    -h|--help)      print "usage: cpuleaks [--kill] [--threshold PCT]"; exit 0 ;;
+    *)              print -u2 "cpuleaks: unknown option '$1'"; exit 2 ;;
+  esac
+  shift
+done
+
+local me; me=$(id -un)
+
+# Instantaneous CPU per pid from the 2nd `top` sample (1st is a useless baseline).
+typeset -A CPU
+local pid cpu
+while read -r pid cpu; do
+  [[ -n "$pid" ]] && CPU[$pid]="$cpu"
+done < <(top -l 2 -o cpu -stats pid,cpu -n 40 2>/dev/null |
+         awk 'NR>1 && $1=="PID"{s++} s>=2 && ($1+0)>0 {print $1, $2}')
+
+# Keep only hot pids that are orphaned + detached + owned by me.
+local -a rows
+local ppid tty user ct up args
+for pid in ${(k)CPU}; do
+  (( ${CPU[$pid]} >= THRESH )) || continue
+  read -r ppid tty user ct up args <<<"$(ps -ww -o ppid=,tty=,user=,time=,etime=,args= -p $pid 2>/dev/null)"
+  [[ "$ppid" == "1" && "$tty" == "??" && "$user" == "$me" ]] || continue
+  # Skip OS services and app bundles — legit launchd-managed background work,
+  # never the shape of a leaked dev-server/CLI (which runs from node_modules/mise/etc).
+  [[ "$args" == */System/Library/* || "$args" == *.app/Contents/* ]] && continue
+  rows+=("$pid"$'\t'"${CPU[$pid]}"$'\t'"$ct"$'\t'"$up"$'\t'"${args[1,78]}")
+done
+
+if (( ${#rows} == 0 )); then
+  print "No orphaned CPU hogs (ppid=1, no TTY, >=${THRESH}% CPU now) owned by $me."
+  print "If your machine is hot, leaks may be mid-trough — re-run, or lower --threshold."
+  exit 0
+fi
+
+# Sort by current CPU, descending.
+rows=("${(@On)rows}")
+
+printf "%-7s %-6s %-12s %-13s %s\n" PID %CPU CPU-TIME UPTIME COMMAND
+local r
+for r in "${rows[@]}"; do
+  print -r -- "$r" | while IFS=$'\t' read -r pid cpu ct up args; do
+    printf "%-7s %-6s %-12s %-13s %s\n" "$pid" "$cpu" "$ct" "$up" "$args"
+  done
+done
+
+local -a pids
+for r in "${rows[@]}"; do pids+=("${r%%$'\t'*}"); done
+
+if (( ! KILL )); then
+  print "\n(dry run) ${#pids} match. Review the COMMAND column, then run 'cpuleaks --kill'."
+  exit 0
+fi
+
+print -n "\nKill these ${#pids} process(es)? [y/N] "
+local ans; read -r ans
+[[ "$ans" == [yY]* ]] || { print "Aborted."; exit 1 }
+
+kill ${pids[@]} 2>/dev/null
+sleep 2
+local p survivors=0
+for p in ${pids[@]}; do
+  kill -0 "$p" 2>/dev/null && { kill -9 "$p" 2>/dev/null; (( survivors++ )) }
+done
+print "SIGTERM -> ${#pids}, force-killed ${survivors} survivor(s)."

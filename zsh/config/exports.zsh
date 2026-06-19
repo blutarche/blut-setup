@@ -14,6 +14,9 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 # Local Binaries
 export PATH="$HOME/.local/bin:$PATH"
 
+# Custom scripts (blut-setup/zsh/config/scripts)
+export PATH="$HOME/.config/zsh/scripts:$PATH"
+
 # Go
 export GOPATH="$HOME/go"
 export GOBIN="$GOPATH/bin"
