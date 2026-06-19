@@ -14,6 +14,11 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 # Local Binaries
 export PATH="$HOME/.local/bin:$PATH"
 
+# Superset CLI — normally only added inside Superset-launched terminals
+# (via ZDOTDIR=~/.superset/zsh wrappers). Add it here so `superset` resolves
+# in any shell, not just ones the Superset app spawns.
+[ -d "$HOME/.superset/bin" ] && export PATH="$HOME/.superset/bin:$PATH"
+
 # Custom scripts (blut-setup/zsh/config/scripts)
 export PATH="$HOME/.config/zsh/scripts:$PATH"
 
