@@ -72,3 +72,6 @@ fastfetch
 # Navi (Cheatsheets) - Ctrl+G to launch
 eval "$(navi widget zsh)"
 
+# Direnv (per-project env via .envrc) — guarded: not every machine has it installed
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
+
