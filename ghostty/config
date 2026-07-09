@@ -4,6 +4,10 @@
 theme = Catppuccin Mocha
 background = #000000
 
+# Bright blue → Catppuccin peach. Claude Code hardcodes inline code (and links)
+# to ANSI bright blue; peach makes code stand out from white prose.
+palette = 12=#fab387
+
 # Font (matches VSCode Monaspace)
 font-family = "Monaspace Neon NF"
 font-size = 13
