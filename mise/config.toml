@@ -1,6 +1,6 @@
 [tools]
 go = "latest"
-node = "24"
+node = "24.16"
 python = "3.11"
 sqlc = "latest"
 golangci-lint = "latest"
