@@ -27,8 +27,9 @@ antidote load ${ZDOTDIR:-$HOME}/.config/zsh/plugins.txt
 # --- Modular Configuration ---
 # Source aliases and functions
 for config_file in $HOME/.config/zsh/*.zsh; do
-  # Skip exports.zsh (already loaded) and plugins.txt
+  # Skip exports.zsh (already loaded) and plugins.zsh (antidote's generated cache — already loaded by antidote load)
   [[ "$config_file" == */exports.zsh ]] && continue
+  [[ "$config_file" == */plugins.zsh ]] && continue
   source "$config_file"
 done
 
