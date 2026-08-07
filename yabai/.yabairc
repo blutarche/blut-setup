@@ -7,6 +7,15 @@ yabai -m rule --add app="^Ghostty$" manage=off sticky=on grid=50:50:1:1:48:48
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Raycast$" manage=off
 yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^Google Chrome$" manage=off
+yabai -m rule --add app="^Notion$" manage=off
+yabai -m rule --add app="^Superset$" manage=off sticky=on grid=1:1:0:0:1:1
+yabai -m rule --add app="^TickTick$" manage=off sticky=on
+yabai -m rule --add app="^1Password$" manage=off
+yabai -m rule --add app="^Discord$" manage=off
+yabai -m rule --add app="^Slack$" manage=off
+yabai -m rule --add app="^Telegram$" manage=off
+yabai -m rule --add app="^Docker Desktop$" manage=off
 
 yabai -m config window_gap 8
 yabai -m config top_padding 8
