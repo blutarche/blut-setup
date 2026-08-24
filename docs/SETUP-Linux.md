@@ -76,6 +76,11 @@ cd /path/to/blut-setup
 ln -sf "$(pwd)/zsh-fedora/.zshrc" ~/.zshrc
 mkdir -p ~/.config
 ln -sf "$(pwd)/zsh-fedora/config" ~/.config/zsh
+
+mkdir -p ~/.config/mise
+ln -sf "$(pwd)/mise/config.toml" ~/.config/mise/config.toml
+mise trust "$(pwd)/mise/config.toml"   # mise resolves the symlink to its real path; trust it once
+mise install
 ```
 
 ### 7) New shell
@@ -105,12 +110,13 @@ Restart Cursor after changing this.
 |------|--------|
 | `~/.zshrc` | `blut-setup/zsh-fedora/.zshrc` |
 | `~/.config/zsh` | `blut-setup/zsh-fedora/config` |
+| `~/.config/mise/config.toml` | `blut-setup/mise/config.toml` |
 | `~/.config/Cursor/User/settings.json` | `blut-setup/vscode/settings.json` |
 
 ## Verify
 
 ```bash
-for link in ~/.zshrc ~/.config/zsh ~/.config/Cursor/User/settings.json; do
+for link in ~/.zshrc ~/.config/zsh ~/.config/mise/config.toml ~/.config/Cursor/User/settings.json; do
   [[ -L "$link" ]] && echo "ok $link" || echo "missing $link"
 done
 ```

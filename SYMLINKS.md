@@ -5,7 +5,7 @@ Configs are symlinked so edits in the repo apply immediately. Exact commands and
 ## By platform
 
 - **macOS** — `zsh/.zshrc` + `zsh/.zshenv` + `zsh/config/` + `mise/config.toml` (Yabai, Ghostty, Cursor under `~/Library/…`): [docs/SETUP-macOS.md](./docs/SETUP-macOS.md)
-- **Fedora KDE** — `zsh-fedora/.zshrc` + `zsh-fedora/config/` + symlink `~/.config/Cursor/User/settings.json` → `vscode/settings.json`: [docs/SETUP-Linux.md](./docs/SETUP-Linux.md)
+- **Fedora KDE** — `zsh-fedora/.zshrc` + `zsh-fedora/config/` + `mise/config.toml` + symlink `~/.config/Cursor/User/settings.json` → `vscode/settings.json`: [docs/SETUP-Linux.md](./docs/SETUP-Linux.md)
 
 ## Submodules (all platforms)
 
