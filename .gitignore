@@ -1,2 +1,3 @@
 .DS_Store
 zsh/config/plugins.zsh
+zsh-fedora/config/plugins.zsh

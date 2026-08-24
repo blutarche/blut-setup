@@ -1,0 +1,8 @@
+# Plugins: no command-not-found on Fedora (breaks with PackageKit).
+
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/docker
+
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
