@@ -15,7 +15,8 @@ Dotfiles and Zsh: **macOS** uses `zsh/` (original layout). **Fedora** uses top-l
 blut-setup/
 ├── docs/
 │   ├── SETUP-macOS.md   # macOS install & symlinks
-│   └── SETUP-Linux.md   # Fedora KDE (`zsh-fedora/`), Konsole
+│   ├── SETUP-Linux.md   # Fedora KDE (`zsh-fedora/`), Konsole
+│   └── PALETTE.md       # canonical terminal palette reference
 ├── ghostty/
 │   └── config
 ├── zsh/                 # macOS only — unchanged paths
@@ -27,6 +28,7 @@ blut-setup/
 │   └── config/
 ├── mise/
 │   └── config.toml      # mise tool versions + global npm: CLIs (codex, omc, …)
+├── orca/                # blutarche theme (Catppuccin Mocha palette) for Orca terminal
 ├── superset/            # Catppuccin Mocha theme for Superset terminal
 ├── yabai/
 │   └── .yabairc
@@ -46,6 +48,7 @@ blut-setup/
 ## Reference
 
 - [SYMLINKS.md](./SYMLINKS.md) — index to platform-specific symlink instructions
+- [docs/PALETTE.md](./docs/PALETTE.md) — canonical terminal palette reference
 
 ## Dependencies (Zsh stack)
 

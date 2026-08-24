@@ -22,12 +22,9 @@ custom theme.
 - For colored CLI output (e.g. Claude Code) to follow this palette, set the
   CLI to an ANSI-colors theme. Claude Code: `/theme` → *Dark mode (ANSI
   colors only)*. Otherwise the tool's hardcoded truecolor ignores the palette.
-- `brightBlue` is intentionally Catppuccin peach (`#fab387`), not blue: Claude
-  Code renders inline code as ANSI bright blue, and peach makes it stand out
-  from white prose. Same remap as `palette = 12` in the Ghostty config.
-- `white` is intentionally dimmed to overlay0 (`#6c7086`): Claude Code renders
-  file/diff preview content as ANSI white, and dimming it keeps tool output
-  visually quieter than answer prose (which uses the default foreground).
+- `brightBlue` and `white` are intentionally remapped from the stock
+  Catppuccin values; see [docs/PALETTE.md](../docs/PALETTE.md) for the
+  canonical palette and the reasons for both divergences.
 - Imported themes live in Superset's own app state
   (`~/.superset/app-state.json` → `themeState.customThemes`); this repo file is
   just the version-controlled source.
