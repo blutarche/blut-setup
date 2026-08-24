@@ -1,152 +1,55 @@
 # blut-setup
 
-Dotfiles and config for macOS. Managed via symlinks into this repo.
+Dotfiles and Zsh: **macOS** uses `zsh/` (original layout). **Fedora** uses top-level `zsh-fedora/` so the macOS tree stays untouched. Symlink from this repo on each machine.
+
+## Platform setup
+
+| Platform | Guide |
+|----------|--------|
+| macOS | [docs/SETUP-macOS.md](./docs/SETUP-macOS.md) — Ghostty, Yabai, Homebrew |
+| Linux (Fedora KDE) | [docs/SETUP-Linux.md](./docs/SETUP-Linux.md) — Konsole, `dnf`, no Ghostty/Yabai |
 
 ## Structure
 
 ```
 blut-setup/
-├── ghostty/          # Ghostty terminal config
+├── docs/
+│   ├── SETUP-macOS.md   # macOS install & symlinks
+│   └── SETUP-Linux.md   # Fedora KDE (`zsh-fedora/`), Konsole
+├── ghostty/
 │   └── config
-├── zsh/
-│   ├── .zshrc        # Main shell config (interactive)
-│   ├── .zshenv       # Sourced by every zsh; mise shims fallback for non-interactive shells
-│   └── config/       # Modular zsh config (aliases, exports, plugins, fzf-tab)
+├── zsh/                 # macOS only — unchanged paths
+│   ├── .zshrc
+│   ├── .zshenv          # sourced by every zsh; mise shims fallback for non-interactive shells
+│   └── config/         # modular zsh + fzf-tab submodule
+├── zsh-fedora/          # Fedora only — separate tree (reuses zsh/config/fzf-tab)
+│   ├── .zshrc
+│   └── config/
 ├── mise/
-│   └── config.toml   # mise tool versions + global npm: CLIs (codex, omc, …)
+│   └── config.toml      # mise tool versions + global npm: CLIs (codex, omc, …)
+├── superset/            # Catppuccin Mocha theme for Superset terminal
 ├── yabai/
-│   └── .yabairc      # Yabai window manager
-└── vscode/           # VS Code settings
+│   └── .yabairc
+└── vscode/
 ```
 
-## Quick start (new Mac)
+## Quick start
 
-This assumes macOS with Zsh as your login shell.
+1. Clone and init submodules (required for `fzf-tab`): see your platform doc.
+2. Install dependencies: [SETUP-macOS.md](./docs/SETUP-macOS.md) or [SETUP-Linux.md](./docs/SETUP-Linux.md).
+3. Apply symlinks from [SYMLINKS.md](./SYMLINKS.md) or copy commands from the platform guide.
 
-### Prereqs
+## Cursor / VS Code
 
-- Git (Xcode Command Line Tools)
+`vscode/settings.json` follows the normal Cursor/VS Code user-settings format. Install paths differ by OS; see **SETUP-macOS.md** or **SETUP-Linux.md**.
 
-```bash
-xcode-select --install || true
-```
+## Reference
 
-- Homebrew
+- [SYMLINKS.md](./SYMLINKS.md) — index to platform-specific symlink instructions
 
-Install from `https://brew.sh`, then verify:
+## Dependencies (Zsh stack)
 
-```bash
-brew --version
-```
-
-### Install
-
-1) Clone and init submodules (required for `fzf-tab`)
-
-```bash
-cd "$HOME"
-git clone https://github.com/blutarche/blut-setup.git
-cd blut-setup
-git submodule update --init --recursive
-```
-
-2) Install CLI dependencies
-
-```bash
-brew update
-brew install antidote starship zoxide fzf atuin mise navi thefuck fd fastfetch eza bat ripgrep lazygit
-```
-
-3) Apply symlinks (so changes apply immediately)
-
-```bash
-cd /path/to/blut-setup
-
-ln -sf "$(pwd)/zsh/.zshrc" ~/.zshrc
-ln -sf "$(pwd)/zsh/.zshenv" ~/.zshenv
-mkdir -p ~/.config
-ln -sf "$(pwd)/zsh/config" ~/.config/zsh
-
-mkdir -p ~/.config/mise
-ln -sf "$(pwd)/mise/config.toml" ~/.config/mise/config.toml
-mise trust "$(pwd)/mise/config.toml"   # mise resolves the symlink to its real path; trust it once
-
-ln -sf "$(pwd)/yabai/.yabairc" ~/.yabairc
-
-mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
-ln -sf "$(pwd)/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
-```
-
-4) Restart your shell
-
-```bash
-exec zsh -l
-```
-
-### Verify
-
-```bash
-echo "=== Symlinks ===" && \
-for link in ~/.zshrc ~/.zshenv ~/.config/zsh ~/.config/mise/config.toml ~/.yabairc; do
-  [[ -L "$link" ]] && echo "✓ $link -> $(readlink "$link")" || echo "✗ $link (not a symlink)"
-done && \
-[[ -L "$HOME/Library/Application Support/com.mitchellh.ghostty/config" ]] && \
-  echo "✓ Ghostty config -> $(readlink "$HOME/Library/Application Support/com.mitchellh.ghostty/config")" || \
-  echo "✗ Ghostty config (not a symlink)"
-```
-
-## Cursor / VS Code settings
-
-This repo contains user settings at `vscode/settings.json`. Cursor supports the same format.
-
-### Install into Cursor (copy)
-
-```bash
-mkdir -p "$HOME/Library/Application Support/Cursor/User"
-
-# optional backup
-[ -f "$HOME/Library/Application Support/Cursor/User/settings.json" ] && \
-  cp "$HOME/Library/Application Support/Cursor/User/settings.json" \
-     "$HOME/Library/Application Support/Cursor/User/settings.json.bak.$(date +%Y%m%d-%H%M%S)"
-
-cp "$(pwd)/vscode/settings.json" \
-   "$HOME/Library/Application Support/Cursor/User/settings.json"
-```
-
-### Required extensions/themes referenced by settings
-
-- Theme: `Catppuccin Mocha`
-- Formatter: `esbenp.prettier-vscode`
-
-Install them via Cursor’s Extensions UI.
-
-## Notes / troubleshooting
-
-### Homebrew path (Apple Silicon vs Intel)
-
-The Zsh config supports both Homebrew locations:
-
-- Apple Silicon: `/opt/homebrew`
-- Intel: `/usr/local`
-
-### If Zsh fails on first launch
-
-Most failures are missing dependencies. Ensure these are installed:
-
-```bash
-brew install antidote starship zoxide fzf atuin mise navi thefuck fd fastfetch
-```
-
-### Yabai
-
-`yabai` scripting addition requires SIP changes and manual steps (see yabai docs). You can still symlink `~/.yabairc` now and enable later.
-
-## Reference docs
-
-- Symlinks: [SYMLINKS.md](./SYMLINKS.md)
-
-## Dependencies
-
-- **zsh**: Antidote, Starship, Zoxide, fzf, Atuin, Mise, Navi, TheFuck
-- **yabai**: Requires SIP parts disabled and `yabai --load-sa` for scripting addition
-- **ghostty**: Terminal emulator
+- **Zsh**: Antidote, Starship, Zoxide, fzf, optional: Atuin, Mise, Navi, TheFuck
+- **Extras**: fd (or `fdfind` on Fedora), fastfetch, eza, bat, ripgrep, lazygit
+- **macOS only**: yabai (`~/.yabairc`), Ghostty config under `~/Library/Application Support/...`
+- **Linux (this repo’s doc)**: Konsole — shell config only; terminal theme/profile is local to KDE
