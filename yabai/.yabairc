@@ -1,7 +1,9 @@
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
 
-yabai -m config layout bsp
+# Keep windows floating by default. This avoids yabai retiling windows while
+# background computer-use is locating and interacting with them.
+yabai -m config layout float
 
 yabai -m rule --add app="^Ghostty$" manage=off sticky=on grid=50:50:1:1:48:48
 yabai -m rule --add app="^System Settings$" manage=off
