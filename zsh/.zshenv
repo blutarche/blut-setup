@@ -14,3 +14,14 @@ if [[ -d "$HOME/.local/share/mise/shims" \
       && ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
   export PATH="$HOME/.local/share/mise/shims:$PATH"
 fi
+
+# Expose only the MemPalace MCP bearer token to terminal-launched MCP clients.
+# The token itself remains in the owner-only Hermes secret file.
+if [[ -r "$HOME/.hermes/.env" ]]; then
+  while IFS= read -r line; do
+    if [[ "$line" == MEMPALACE_MCP_TOKEN=* ]]; then
+      export MEMPALACE_MCP_TOKEN="${line#*=}"
+      break
+    fi
+  done < "$HOME/.hermes/.env"
+fi
