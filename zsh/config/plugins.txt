@@ -1,7 +1,8 @@
 # Antidote Plugin List
 
 # Plugins
-ohmyzsh/ohmyzsh path:plugins/git
+# git plugin dropped: 197 aliases + a `git version` fork cost ~33ms/startup;
+# custom git aliases already live in zsh/config/aliases.zsh
 ohmyzsh/ohmyzsh path:plugins/docker
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 

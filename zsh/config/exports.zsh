@@ -68,12 +68,23 @@ export CPPFLAGS="-I/usr/local/opt/curl/include"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Homebrew
+# Homebrew — `brew shellenv` forks the brew binary (~40ms on Intel installs).
+# Cache its output; regenerate only when the brew binary itself changes.
+_brew_bin=""
 if [ -x "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  _brew_bin="/opt/homebrew/bin/brew"
 elif [ -x "/usr/local/bin/brew" ]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+  _brew_bin="/usr/local/bin/brew"
 fi
+if [ -n "$_brew_bin" ]; then
+  _brew_cache="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh/init-brew.zsh"
+  if [ ! -f "$_brew_cache" ] || [ "$_brew_bin" -nt "$_brew_cache" ]; then
+    mkdir -p "${_brew_cache:h}"
+    "$_brew_bin" shellenv >| "$_brew_cache"
+  fi
+  source "$_brew_cache"
+fi
+unset _brew_bin _brew_cache
 
 # Deno
 export DENO_INSTALL="$HOME/.deno"

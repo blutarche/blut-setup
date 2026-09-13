@@ -6,10 +6,10 @@
 # the non-interactive shells that never source .zshrc, where `mise activate`
 # (in .zshrc) does not run.
 #
-# Interactive shells then run `mise activate zsh` in .zshrc, which REMOVES this
-# shims entry and replaces it with full PATH/env/hook activation — so real
-# install dirs win interactively and shims are only the fallback. The two are
-# designed to compose. See https://mise.jdx.dev/dev-tools/shims.html
+# Interactive shells also run `mise activate zsh --shims` in .zshrc (same
+# shims mechanism, no per-prompt hook — that hook cost 90-200ms on every
+# prompt). This file is the fallback for non-interactive shells that never
+# source .zshrc. See https://mise.jdx.dev/dev-tools/shims.html
 if [[ -d "$HOME/.local/share/mise/shims" \
       && ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
   export PATH="$HOME/.local/share/mise/shims:$PATH"

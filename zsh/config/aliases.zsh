@@ -4,6 +4,7 @@
 alias rezsh="source ~/.zshrc"
 alias execz="exec zsh"
 alias zconf="code ~/.config/zsh"
+command -v fastfetch >/dev/null 2>&1 && alias ff="fastfetch"
 
 # Shortcuts
 alias k="kubectl"
