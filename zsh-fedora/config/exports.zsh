@@ -2,6 +2,9 @@
 
 export LANG=en_US.UTF-8
 
+# Keep entries unique while preserving the first (highest-priority) copy.
+typeset -U path
+
 export PATH="$HOME/.local/bin:$PATH"
 
 # Go
@@ -54,3 +57,6 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 export PATH
 
 [[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+
+# Normalize scalar PATH assignments from the snippets above.
+path=($path)
