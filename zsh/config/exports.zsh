@@ -7,6 +7,8 @@ export LANG=en_US.UTF-8
 # Construct PATH by prepending to ensure priority
 # Start with system paths if needed, or just let them be
 # But usually $PATH already has system stuff. We prepend custom stuff.
+# Keep entries unique while preserving the first (highest-priority) copy.
+typeset -U path
 
 # Mise
 export PATH="$HOME/.local/share/mise/shims:$PATH"
@@ -94,11 +96,11 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 PATH="/Library/Frameworks/Python.framework/Versions/3.13/bin:${PATH}"
 export PATH
 
-# Google Cloud SDK
-export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
-
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:$HOME/.lmstudio/bin"
 export PATH="$PATH:$HOME/bin"
+
+# Vendor snippets above may assign scalar PATH values directly; normalize once.
+path=($path)
 
 # End of LM Studio CLI section

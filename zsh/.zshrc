@@ -113,8 +113,5 @@ command -v direnv >/dev/null 2>&1 && _cached_init direnv direnv hook zsh
 
 _cached_init_flush
 
-# Hermes Agent — ensure its compatible venv and ~/.local/bin are on PATH
-if [[ -x "$HOME/.hermes/hermes-agent/venv/bin/python3" ]]; then
-  export PATH="$HOME/.hermes/hermes-agent/venv/bin:$PATH"
-fi
-export PATH="$HOME/.local/bin:$PATH"
+# Tool initializers can append paths after exports.zsh; remove duplicates once.
+path=($path)

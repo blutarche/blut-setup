@@ -20,27 +20,34 @@ if [[ -x "$HOME/.hermes/hermes-agent/venv/bin/python3" ]]; then
   export PATH="$HOME/.hermes/hermes-agent/venv/bin:$PATH"
 fi
 
-# Expose only the MemPalace MCP bearer token to terminal-launched MCP clients.
-# The token itself remains in the owner-only Hermes secret file.
+# Expose the MemPalace MCP bearer token to terminal-launched clients.
+# Read the owner-only Hermes secret file once; never store its contents here.
 if [[ -r "$HOME/.hermes/.env" ]]; then
-  while IFS= read -r line; do
-    if [[ "$line" == MEMPALACE_MCP_TOKEN=* ]]; then
-      export MEMPALACE_MCP_TOKEN="${line#*=}"
-      break
-    fi
+  typeset -i _mempalace_token_seen=0 _mempalace_atrium_seen=0
+  while IFS= read -r _mempalace_line; do
+    case "$_mempalace_line" in
+      MEMPALACE_MCP_TOKEN=*)
+        if (( !_mempalace_token_seen )); then
+          export MEMPALACE_MCP_TOKEN="${_mempalace_line#*=}"
+          _mempalace_token_seen=1
+        fi
+        ;;
+      MCP_MEMPALACE_API_KEY=*)
+        if [[ -z "${MEMPALACE_ATRIUM_TOKEN:-}" && $_mempalace_atrium_seen -eq 0 ]]; then
+          export MEMPALACE_ATRIUM_TOKEN="${_mempalace_line#*=}"
+          _mempalace_atrium_seen=1
+        fi
+        ;;
+    esac
   done < "$HOME/.hermes/.env"
+  unset _mempalace_line _mempalace_token_seen _mempalace_atrium_seen
 fi
 
 # >>> mempalace-mcp-env >>>
-if [[ -z "${MEMPALACE_ATRIUM_TOKEN:-}" && -r "$HOME/.hermes/.env" ]]; then
-  while IFS= read -r _mempalace_line; do
-    case "$_mempalace_line" in
-      MCP_MEMPALACE_API_KEY=*) export MEMPALACE_ATRIUM_TOKEN="${_mempalace_line#*=}"; break ;;
-    esac
-  done < "$HOME/.hermes/.env"
-  unset _mempalace_line
-fi
 if [[ -n "${MEMPALACE_ATRIUM_TOKEN:-}" && -z "${MEMPALACE_MCP_TOKEN:-}" ]]; then
   export MEMPALACE_MCP_TOKEN="$MEMPALACE_ATRIUM_TOKEN"
 fi
+
+# Keep inherited PATH entries unique for every zsh invocation.
+typeset -U path
 # <<< mempalace-mcp-env <<<
