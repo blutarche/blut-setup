@@ -15,6 +15,11 @@ if [[ -d "$HOME/.local/share/mise/shims" \
   export PATH="$HOME/.local/share/mise/shims:$PATH"
 fi
 
+# Hermes' launcher uses /usr/bin/env python3; prefer its own compatible venv.
+if [[ -x "$HOME/.hermes/hermes-agent/venv/bin/python3" ]]; then
+  export PATH="$HOME/.hermes/hermes-agent/venv/bin:$PATH"
+fi
+
 # Expose only the MemPalace MCP bearer token to terminal-launched MCP clients.
 # The token itself remains in the owner-only Hermes secret file.
 if [[ -r "$HOME/.hermes/.env" ]]; then
@@ -25,3 +30,17 @@ if [[ -r "$HOME/.hermes/.env" ]]; then
     fi
   done < "$HOME/.hermes/.env"
 fi
+
+# >>> mempalace-mcp-env >>>
+if [[ -z "${MEMPALACE_ATRIUM_TOKEN:-}" && -r "$HOME/.hermes/.env" ]]; then
+  while IFS= read -r _mempalace_line; do
+    case "$_mempalace_line" in
+      MCP_MEMPALACE_API_KEY=*) export MEMPALACE_ATRIUM_TOKEN="${_mempalace_line#*=}"; break ;;
+    esac
+  done < "$HOME/.hermes/.env"
+  unset _mempalace_line
+fi
+if [[ -n "${MEMPALACE_ATRIUM_TOKEN:-}" && -z "${MEMPALACE_MCP_TOKEN:-}" ]]; then
+  export MEMPALACE_MCP_TOKEN="$MEMPALACE_ATRIUM_TOKEN"
+fi
+# <<< mempalace-mcp-env <<<

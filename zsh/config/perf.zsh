@@ -18,13 +18,18 @@ _cached_init() {
 
 _cached_init_flush() {
   local merged="$ZSH_CACHE_DIR/init-merged.zsh"
+  local manifest="$ZSH_CACHE_DIR/init-merged.list"
+  local current_manifest="${(j:\n:)_cached_init_files}"
   local f rebuild=0
   [[ -f "$merged" ]] || rebuild=1
+  [[ -f "$manifest" ]] || rebuild=1
+  [[ -f "$manifest" && "$(<"$manifest")" != "$current_manifest" ]] && rebuild=1
   for f in "${_cached_init_files[@]}"; do
     [[ "$f" -nt "$merged" ]] && rebuild=1
   done
   if (( rebuild )); then
     cat "${_cached_init_files[@]}" >| "$merged"
+    print -r -- "$current_manifest" >| "$manifest"
     zcompile "$merged" 2>/dev/null
   fi
   source "$merged"

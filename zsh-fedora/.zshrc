@@ -41,15 +41,17 @@ unset _zfed
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 command -v thefuck >/dev/null 2>&1 && eval "$(thefuck --alias 2>/dev/null)"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if command -v fzf >/dev/null 2>&1; then
-  source <(fzf --zsh)
-  if command -v fdfind >/dev/null 2>&1; then
-    export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix --hidden --follow --exclude .git'
-  else
-    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+if [[ -t 0 && -t 1 ]]; then
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  if command -v fzf >/dev/null 2>&1; then
+    source <(fzf --zsh)
+    if command -v fdfind >/dev/null 2>&1; then
+      export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+    else
+      export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+    fi
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   fi
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"

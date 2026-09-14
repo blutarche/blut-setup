@@ -88,8 +88,10 @@ fuck() {
   fuck "$@"
 }
 
-# FZF (Fuzzy Finder)
-_cached_init fzf fzf --zsh
+# --- FZF (Fuzzy Finder) ---
+if [[ -t 0 && -t 1 ]]; then
+  _cached_init fzf fzf --zsh
+fi
 
 # FZF Configuration (Use fd for speed & respecting .gitignore)
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
@@ -111,5 +113,8 @@ command -v direnv >/dev/null 2>&1 && _cached_init direnv direnv hook zsh
 
 _cached_init_flush
 
-# Hermes Agent — ensure ~/.local/bin is on PATH
+# Hermes Agent — ensure its compatible venv and ~/.local/bin are on PATH
+if [[ -x "$HOME/.hermes/hermes-agent/venv/bin/python3" ]]; then
+  export PATH="$HOME/.hermes/hermes-agent/venv/bin:$PATH"
+fi
 export PATH="$HOME/.local/bin:$PATH"
