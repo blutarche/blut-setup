@@ -19,7 +19,19 @@ source "${ZDOTDIR:-$HOME}/.config/zsh/exports.zsh"
 # --- Antidote Plugin Manager (static bundle; only invoke antidote when plugins.txt changes) ---
 _plugins_txt="${ZDOTDIR:-$HOME}/.config/zsh/plugins.txt"
 _plugins_bundle="${ZDOTDIR:-$HOME}/.config/zsh/plugins.zsh"
+_plugins_stale=0
 if [[ ! -f "$_plugins_bundle" || "$_plugins_txt" -nt "$_plugins_bundle" ]]; then
+  _plugins_stale=1
+else
+  # The bundle points into antidote's clone cache (~/Library/Caches on macOS),
+  # which the OS or cleanup tools may purge; rebuild so antidote re-clones.
+  for _src in ${(M)${(f)"$(<$_plugins_bundle)"}:#source *}; do
+    _src=${(Q)${(e)_src#source }}
+    [[ -f "$_src" ]] || { _plugins_stale=1; break; }
+  done
+  unset _src
+fi
+if (( _plugins_stale )); then
   if command -v brew >/dev/null 2>&1; then
     source "$(brew --prefix antidote)/share/antidote/antidote.zsh"
   else
@@ -42,7 +54,7 @@ fi
 # autoload it explicitly first.
 autoload -Uz is-at-least
 source "$_plugins_bundle"
-unset _plugins_txt _plugins_bundle
+unset _plugins_txt _plugins_bundle _plugins_stale
 
 # --- Modular Configuration ---
 # Source aliases and functions
