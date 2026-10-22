@@ -51,3 +51,9 @@ fi
 # Keep inherited PATH entries unique for every zsh invocation.
 typeset -U path
 # <<< mempalace-mcp-env <<<
+
+# Claude Code must not use a shared /tmp/claude-<uid> owned by another user.
+# macOS provides a private temp directory for each account; use it in every shell.
+if [[ -z "${CLAUDE_CODE_TMPDIR:-}" && -n "${TMPDIR:-}" && -d "$TMPDIR" && -O "$TMPDIR" ]]; then
+  export CLAUDE_CODE_TMPDIR="${TMPDIR%/}"
+fi
